@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang=ru>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="Content-Security-Policy" content="default-src gap://ready file://* *; style-src 'self' http://* https://* 'unsafe-inline'; script-src 'self' http://* https://* 'unsafe-inline' 'unsafe-eval'">
+    <title>Document</title>
+    <link rel="stylesheet" href="//stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <script src="//www.google.com/recaptcha/api.js?render=6Lc_lrgUAAAAANrPi6AwZTaU91vBVRbUeyD2n8Th"></script>
+        <script>
+          grecaptcha.ready(function() {
+            grecaptcha.execute('6Lc_lrgUAAAAANrPi6AwZTaU91vBVRbUeyD2n8Th', {action: 'homepage'}).then(function(token) {
+                $.ajax({
+                  url: 'scripts.php',
+                  type: 'POST',
+                  data:({
+                    secret:'6Lc_lrgUAAAAAMrepDB6Db8JvN6AQD_IZAdqpe7t',
+                    response: token
+                  }),
+                  success: function (data, status, error) {
+                    console.log(data, status,error);
+                    var respData = JSON.parse(data);
+                    console.log(JSON.parse(respData.content));
+                    $(".cart_number_form").show();
+                  },
+                  error: function (data, status, error) {
+                    console.log('error');
+                    console.log(data, status,error);
+                    $(".cart_number_form").hide();
+                  },
+                });
+                console.log(token);
+            });
+          });
+        </script>
+        <div class="row">
+            <div class="col-md-12">
+                <form action="" class="cart_number_form" method="POST" style="display: none;">
+                    <div class="form-group">
+                        <label for="card_number">Card number</label>
+                        <input class="form-control" type="text" id="card_number" aria-describedby="card_number_help"
+                               placeholder="Card number">
+                        <small id="card_number_help" class="form-text text-muted">Enter number from you special
+                            card</small>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script
+            src="https://code.jquery.com/jquery-3.4.1.min.js"
+            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" type="text/javascript"></script>
+</body>
+</html>
