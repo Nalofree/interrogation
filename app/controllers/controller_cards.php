@@ -15,10 +15,10 @@ class Controller_Cards extends Controller
         $this->view->generate('reg_form_view.php', 'template_view.php', $data = array("card_number"=>
           $_POST["card_number"]));
       }else{
-        var_dump($response['err']);
+        $this->view->generate('err_view.php', 'template_view.php',$response);
       }
     }else{
-      var_dump("Card number is not exist");
+      $this->view->generate('err_view.php', 'template_view.php',['err'=>"Card number is not exist","data"=>NULL]);
     }
   }
 }
