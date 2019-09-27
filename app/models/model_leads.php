@@ -68,17 +68,34 @@ class Model_Leads extends Model {
 //    echo "<br><br>";
 //    echo "<br><br>";
 
-//    if (array_search($this->card_id,$card_ids) === FALSE) {
-//      $record = $this->link->query("INSERT INTO leads (".$prop_keys.") VALUES (".$captions.")");
-//      if ($record) {
-//        $data = array("err"=>NULL,"data"=>array("member_id"=>$this->member_id));
-//      }else{
-//        $data = array("err"=>"Something wents wrong","data"=>NULL);
-//      }
-//    }else{
-//      $data = array("err"=>"This card is already used","data"=>NULL);
-//    }
-    $data = array("err"=>NULL,"data"=>array("member_id"=>$this->member_id));
+    if ($card_ids) {
+      if (array_search($this->card_id,$card_ids) === FALSE) {
+        $record = $this->link->query("INSERT INTO leads (".$prop_keys.") VALUES (".$captions.")");
+        if ($record) {
+          $data = array("err"=>NULL,"data"=>array("member_id"=>$this->member_id));
+          $send = mail( $this->email, "Номер участника", "Ваш номер участника\n\r $this->member_id\n\rпо нему вы сможете забрать выигрыш");
+          if (!$send) {
+            throw new Exception("Ошибка отправки письма");
+          }
+        }else{
+          $data = array("err"=>"Что-то пошло не так","data"=>NULL);
+        }
+      }else{
+        $data = array("err"=>"Этот номер карты уже использован","data"=>NULL);
+      }
+    } else {
+      $record = $this->link->query("INSERT INTO leads (".$prop_keys.") VALUES (".$captions.")");
+      if ($record) {
+        $data = array("err"=>NULL,"data"=>array("member_id"=>$this->member_id));
+        $send = mail( $this->email, "Номер участника", "Ваш номер участника\n\r $this->member_id\n\rпо нему вы сможете забрать выигрыш");
+        if (!$send) {
+          throw new Exception("Ошибка отправки письма");
+        }
+      }else{
+        $data = array("err"=>"Что-то пошло не так","data"=>NULL);
+      }
+    }
+//    $data = array("err"=>NULL,"data"=>array("member_id"=>$this->member_id));
     return $data;
   }
 

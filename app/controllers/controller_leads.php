@@ -64,16 +64,49 @@ class Controller_Leads extends Controller
 
   function action_check_email(){
     $emails = $this->model->get_all('email');
-    if (isset($_POST['email'])) {
-      if (array_search($_POST['email'],$emails) === FALSE) {
-        $data = array("err"=>NULL,"is_not_exist"=>TRUE);
+    if($emails) {
+      if (isset($_POST['email'])) {
+        if (array_search($_POST['email'],$emails) === FALSE) {
+          $data = array("err"=>NULL,"is_not_exist"=>TRUE);
+        }else{
+          $data = array("err"=>"Этот адрес электронной почты уже использован", "is_not_exist"=>FALSE);
+        }
       }else{
-        $data = array("err"=>"This email is already used", "is_not_exist"=>FALSE);
+        $data = array("err"=>"Что-то пошло не так", "is_not_exist"=>FALSE);
       }
+      echo json_encode($data);
     }else{
-      $data = array("err"=>"Something wents wrong. Email is not exist.", "is_not_exist"=>FALSE);
+      if (isset($_POST['email'])) {
+        $data = ["err" => NULL, "is_not_exist" => TRUE];
+      }else{
+        $data = array("err"=>"Что-то пошло не так", "is_not_exist"=>FALSE);
+      }
+      echo json_encode($data);
     }
-    echo json_encode($data);
+    return $data;
+  }
+
+  function action_check_phone(){
+    $phones = $this->model->get_all('phone');
+    if($phones) {
+      if (isset($_POST['phone'])) {
+        if (array_search($_POST['phone'],$phones) === FALSE) {
+          $data = array("err"=>NULL,"is_not_exist"=>TRUE);
+        }else{
+          $data = array("err"=>"Этот номер телефона уже использован", "is_not_exist"=>FALSE);
+        }
+      }else{
+        $data = array("err"=>"Что-то пошло не так", "is_not_exist"=>FALSE);
+      }
+      echo json_encode($data);
+    }else{
+      if (isset($_POST['phone'])) {
+        $data = ["err" => NULL, "is_not_exist" => TRUE];
+      }else{
+        $data = array("err"=>"Что-то пошло не так", "is_not_exist"=>FALSE);
+      }
+      echo json_encode($data);
+    }
     return $data;
   }
 
@@ -94,14 +127,18 @@ class Controller_Leads extends Controller
     }
     $new_member_id = randomNumber(4);
     $member_ids = $this->model->get_all('member_id');
-    array_search($new_member_id,$member_ids);
-    do {
+    //    array_search($new_member_id,$member_ids);
+    if($member_ids) {
+      do {
+        $data->set_prop('member_id', $new_member_id);
+      } while (array_search($new_member_id,$member_ids) !== FALSE);
+    }else{
       $data->set_prop('member_id', $new_member_id);
-    } while (array_search($new_member_id,$member_ids) !== FALSE);
+    }
 
     $result = $data->record_lead();
     if ($result['err']){
-      echo "err";
+      $this->view->generate('err_view.php', 'template_view.php',$result);
     }else{
       $this->view->generate('final_view.php', 'template_view.php',$result['data']);
     }

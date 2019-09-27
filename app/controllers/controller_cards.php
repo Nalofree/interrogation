@@ -18,7 +18,8 @@ class Controller_Cards extends Controller
         $this->view->generate('err_view.php', 'template_view.php',$response);
       }
     }else{
-      $this->view->generate('err_view.php', 'template_view.php',['err'=>"Card number is not exist","data"=>NULL]);
+      $this->view->generate('err_view.php', 'template_view.php',['err'=>"Карты с таким номером не существует",
+        "data"=>NULL]);
     }
   }
 }

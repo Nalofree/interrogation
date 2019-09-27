@@ -28,7 +28,7 @@
         </label>
       </div>
       <p class="description-text description-partner">Хотели бы вы получать дополнительную прибыль, сотрудничая с
-          FirstVDS? *</p>
+          FirstVDS?</p>
       <div class="row">
         <div class="col-4">
           <div class="form-check custom-control custom-radio">
@@ -63,24 +63,25 @@
     </div>
     <div class="secondstep">
         <div class="description-text">Заполните обязательные поля:</div>
-      <input class="form-control" name="name" id="name" type="text" required placeholder="Имя *">
+      <input class="form-control" name="name" id="name" type="text" required placeholder="Имя">
       <input name="card_id" id="card_id" type="hidden" value="<?php echo $data['card_number']?>">
-      <input class="form-control" name="surname" id="surname" type="text" required placeholder="Фамилия *">
-      <input class="form-control" name="company" id="company" type="text" required placeholder="Компния *">
-      <input class="form-control" name="position" id="position" type="text" required placeholder="Должность *">
-      <input class="form-control" name="phone" id="phone" type="text" required placeholder="+7(___)___-__-__ *">
-      <input class="form-control" name="email" id="email" type="text" required placeholder="Email *"
+      <input class="form-control" name="surname" id="surname" type="text" required placeholder="Фамилия">
+      <input class="form-control" name="company" id="company" type="text" required placeholder="Компания">
+      <input class="form-control" name="position" id="position" type="text" required placeholder="Должность">
+      <input class="form-control" name="phone" id="phone" type="text" required placeholder="+7(___)___-__-__">
+      <input class="form-control" name="email" id="email" type="text" required placeholder="Email"
              aria-describedby="emailHelp" >
       <p class="description-text description-text--small">
-          на этот емэйл будет отправлен купон
+          на этот email будет отправлен купон
           для участия в розыгрыше, без которого
           вы не сможете забрать выигрыш
       </p>
       <button type="submit" disabled class="btn btn-interr send-form-button">Зарегистрироваться</button>
       <div class="form-check custom-control custom-checkbox">
-        <input class="form-check-input custom-control-input" type="checkbox" value="" id="condition">
+        <input class="form-check-input custom-control-input" type="checkbox" value="" id="condition" checked>
         <label class="form-check-label custom-control-label description-text description-text--small" for="condition">
-          Заполняя форму вы соглашаетесь с&nbsp;<a href="">политикой конфиденциальности</a>
+          Заполняя форму вы соглашаетесь с&nbsp;<a href="https://firstvds.ru/content/processing-personal-data" target="_blank"
+            >политикой конфиденциальности</a>
         </label>
       </div>
     </div>

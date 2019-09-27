@@ -38,12 +38,12 @@ class Model_Cards extends Model {
       }
       $lead_alr_reg = $this->link->query("SELECT * FROM leads  WHERE leads.card_id = ".$number);
       if ($lead_alr_reg->num_rows > 0) {
-        $data = array("err"=>"This card is already used","data"=>NULL); // cards is already used
+        $data = array("err"=>"Этот номер карты уже использован","data"=>NULL); // cards is already used
       }else{
         $data = array("err"=>NULL,"data"=>$cards_arr[0]);
       }
     }else{
-      $data = array("err"=>"This card is not exist","data"=>NULL); // cards is not exist
+      $data = array("err"=>"Карты с таким номером не существует","data"=>NULL); // cards is not exist
     }
 
     return $data;
