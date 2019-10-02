@@ -21,7 +21,7 @@ class Model_Leads extends Model {
 
   private function connect()
   {
-    $this->link = new mysqli("127.0.0.1", "db_user_n", "db_user_n", "interr_db");
+    $this->link = new mysqli("127.0.0.1", "db_user_n", "230p88gt7~db_user_n", "interr_db");
   }
 
   public function __get($name) {
@@ -60,17 +60,11 @@ class Model_Leads extends Model {
     .$this->member_id."'";
 
     $card_ids = $this->get_all("card_id");
-//
-//    var_dump(array_search($this->card_id,$card_ids));
-//    echo "<br><br>";
-//    echo "<br><br>";
-//    var_dump($card_ids);
-//    echo "<br><br>";
-//    echo "<br><br>";
 
     if ($card_ids) {
       if (array_search($this->card_id,$card_ids) === FALSE) {
-        $record = $this->link->query("INSERT INTO leads (".$prop_keys.") VALUES (".$captions.")");
+        $record = $this->link->query("INSERT INTO leads (".mysqli_real_escape_string($this->link,$prop_keys).") VALUES ("
+            .mysqli_real_escape_string($this->link,$captions).")");
         if ($record) {
           $data = array("err"=>NULL,"data"=>array("member_id"=>$this->member_id));
           $send = mail( $this->email, "Номер участника", "Ваш номер участника\n\r $this->member_id\n\rпо нему вы сможете забрать выигрыш");
@@ -84,7 +78,9 @@ class Model_Leads extends Model {
         $data = array("err"=>"Этот номер карты уже использован","data"=>NULL);
       }
     } else {
-      $record = $this->link->query("INSERT INTO leads (".$prop_keys.") VALUES (".$captions.")");
+      $record = $this->link->query("INSERT INTO leads (".mysqli_real_escape_string($this->link,$prop_keys).") VALUES ("
+        .mysqli_real_escape_string($this->link,$captions)
+        .")");
       if ($record) {
         $data = array("err"=>NULL,"data"=>array("member_id"=>$this->member_id));
         $send = mail( $this->email, "Номер участника", "Ваш номер участника\n\r $this->member_id\n\rпо нему вы сможете забрать выигрыш");
@@ -95,7 +91,6 @@ class Model_Leads extends Model {
         $data = array("err"=>"Что-то пошло не так","data"=>NULL);
       }
     }
-//    $data = array("err"=>NULL,"data"=>array("member_id"=>$this->member_id));
     return $data;
   }
 
@@ -118,7 +113,9 @@ class Model_Leads extends Model {
 
     $field_set = $field ? $field : "*";
 
-    $records = $this->link->query("SELECT ".$field_set." FROM leads", MYSQLI_USE_RESULT);
+    $records = $this->link->query("SELECT ".mysqli_real_escape_string($this->link,$field_set)." FROM leads", MYSQLI_USE_RESULT);
+
+    $leads_arr = [];
 
     while ($row = $records->fetch_assoc()){
       $leads_arr[] = $row[$field];
@@ -149,14 +146,6 @@ class Model_Leads extends Model {
   }
 
   public function set_data() {
-    $link = mysqli_connect("127.0.0.1", "db_user_n", "db_user_n", "interr_db");
-
-    if (!$link) {
-      echo "Ошибка: Невозможно установить соединение с MySQL." . PHP_EOL;
-      echo "Код ошибки errno: " . mysqli_connect_errno() . PHP_EOL;
-      echo "Текст ошибки error: " . mysqli_connect_error() . PHP_EOL;
-      exit;
-    }
 
     $prop_keys = '';
     $captions = '';
@@ -178,7 +167,8 @@ class Model_Leads extends Model {
     .$this->email?$this->email:"NULL"."',".$this->card_id?$this->card_id:"NULL".",'"
       .$this->member_id?$this->member_id:"NULL"."'";
 
-    $record = $link->query("INSERT INTO leads (".$prop_keys.") VALUES (".$captions.")");
+    $record = $this->link->query("INSERT INTO leads (".mysqli_real_escape_string($this->link,$prop_keys).") VALUES ("
+      .mysqli_real_escape_string($this->link,$captions).")");
     return $record;
   }
 }

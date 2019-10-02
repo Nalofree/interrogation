@@ -8,73 +8,20 @@ class Controller_check_number extends Controller
     $this->view = new View();
   }
 
+  private function connect()
+  {
+    $this->link = new mysqli("127.0.0.1", "db_user_n", "230p88gt7~db_user_n", "interr_db");
+  }
+
   function action_index()
   {
+    header("Location: /404");
 
-    $link = mysqli_connect("127.0.0.1", "db_user_n", "db_user_n", "interr_db");
-
-    if (!$link) {
-      echo "Ошибка: Невозможно установить соединение с MySQL." . PHP_EOL;
-      echo "Код ошибки errno: " . mysqli_connect_errno() . PHP_EOL;
-      echo "Текст ошибки error: " . mysqli_connect_error() . PHP_EOL;
-      exit;
-    }
-
-//    var_dump($this->model->get_data());
-//    var_dump($_POST);
-
-    $num = $_POST['card_number'];
-
-    if (!$num) {
-      throw new Exception('Something went wrong. Number is not exist.');
-    }
-
-//    echo "Checking card number";
-    if ($result_cards = $link->query("SELECT number FROM cards WHERE cards.number = '".$num."'")) { //INNER JOIN
-      // users ON
-      // users.card_id = cards.id
-//      var_dump($result_cards);
-      // Check card is exist
-      if ($result_cards->num_rows > 0) {
-//        echo "Card is exist, work in progress";
-        // check registred lead
-        if ($result_leads = $link->query("SELECT id FROM leads WHERE leads.card_id = '".$num."'")) {
-          if ($result_leads->num_rows > 0) {
-            echo "Lead is exist, send err message";
-          }else{
-//            echo "Lead is not exist, work in progress";
-//            echo "<br><br> redirect to firststep";
-            $host  = $_SERVER['HTTP_HOST'];
-//            echo $host.'/leads/index/?card='.$num;
-//            header('Location: /leads/index/?card='.$num);
-            $data = array('card'=>$num);
-            $this->view->generate('reg_form_view.php', 'template_view.php',$data);
-          }
-        }else {
-          var_dump($result_leads);
-          throw new Exception('Something went wrong');
-        }
-      }else{
-        echo "Card is not exist, send err message";
-      }
-    }else{
-      var_dump($result_cards);
-      throw new Exception('Something went wrong');
-    }
-
-//    $this->view->generate('404_view.php', 'template_view.php');
   }
 
   function action_preset() {
 
-    $link = mysqli_connect("127.0.0.1", "db_user_n", "db_user_n", "interr_db");
-
-    if (!$link) {
-      echo "Ошибка: Невозможно установить соединение с MySQL." . PHP_EOL;
-      echo "Код ошибки errno: " . mysqli_connect_errno() . PHP_EOL;
-      echo "Текст ошибки error: " . mysqli_connect_error() . PHP_EOL;
-      exit;
-    }
+    $this->connect();
 
     function randomNumber($length) {
       $min = 1 . str_repeat(0, $length-1);
@@ -82,9 +29,7 @@ class Controller_check_number extends Controller
       return mt_rand($min, $max);
     }
 
-    if ($result = $link->query("SELECT number FROM cards")) {
-//      printf("Select вернул %d строк.\n", $result->num_rows);
-//      return $result->num_rows;
+    if ($result = $this->link->query("SELECT number FROM cards")) {
 
 
       if ($result->num_rows > 0) {
@@ -112,49 +57,35 @@ class Controller_check_number extends Controller
           653452, 473322, 238180, 718199, 339726, 636593, 510878, 846225, 813700, 528166, 192941, 586937, 245987, 284647, 559619, 636148, 384382, 264739, 566233, 360741, 580630, 643139, 721564, 832531, 265951, 637293, 243652, 368136, 686242, 660462, 607292, 819750, 490702, 531693, 478974, 890470, 208247, 585844, 293608, 491265, 849194, 823593, 496426, 870086, 417857, 484423, 389685, 463517, 569629, 561089, 791844, 519099, 193850, 576896, 236760, 332973, 804816, 667117, 503339, 558866, 716164, 226755, 768663, 821404, 478289, 453984, 747961, 854532, 708875, 319962, 428231, 338963, 862866, 584901, 647045, 680915, 862596, 578852, 877233, 612199, 641205, 239471, 401307, 215389, 330105, 428019, 684517];
 
         foreach ($hot_cards as $hot_card) {
-          $record = $link->query("INSERT INTO cards (number, type) VALUES ('".$hot_card."','00')");
+          $record = $this->link->query("INSERT INTO cards (number, type) VALUES ('".mysqli_real_escape_string
+            ($this->link,$hot_card)."','00')");
           if (!$record) {
             throw new Exception('Filling card numbers to database error');
           }
         }
 
         foreach ($warm_cards as $warm_card) {
-          $record = $link->query("INSERT INTO cards (number, type) VALUES ('".$warm_card."','01')");
+          $record = $this->link->query("INSERT INTO cards (number, type) VALUES ('".mysqli_real_escape_string
+            ($this->link,$warm_card)."','01')");
           if (!$record) {
             throw new Exception('Filling card numbers to database error');
           }
         }
 
         foreach ($cold_beers as $cold_beer) {
-          $record = $link->query("INSERT INTO cards (number, type) VALUES ('".$cold_beer."','10')");
+          $record = $this->link->query("INSERT INTO cards (number, type) VALUES ('".mysqli_real_escape_string
+            ($this->link,$cold_beer)."','10')");
           if (!$record) {
             throw new Exception('Filling card numbers to database error');
           }
         }
 
         foreach ($staffs as $staff) {
-          $record = $link->query("INSERT INTO cards (number, type) VALUES ('".$staff."','11')");
+          $record = $this->link->query("INSERT INTO cards (number, type) VALUES ('".mysqli_real_escape_string($this->link,$staff)
+            ."','11')");
           if (!$record) {
             throw new Exception('Filling card numbers to database error');
           }
-        }
-
-        foreach ($types as $key => $type) {
-          if($key = "000") {
-
-          }
-//          $count_card_numbers = 0;
-//          do {
-//            $num = randomNumber(6);
-//            if (!array_search($num, $card_numbers)) {
-//              array_push($card_numbers,randomNumber(6));
-//              $count_card_numbers++;
-//              $record = $link->query("INSERT INTO cards (number, type) VALUES ('".$num."','".$key."')");
-//              if (!$record) {
-//                throw new Exception('Filling card numbers to database error');
-//              }
-//            }
-//          } while ($count_card_numbers < 600);
         }
       }
       echo count($card_numbers);

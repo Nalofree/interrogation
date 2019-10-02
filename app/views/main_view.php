@@ -2,44 +2,41 @@
   <script src="//www.google.com/recaptcha/api.js?render=6Lc_lrgUAAAAANrPi6AwZTaU91vBVRbUeyD2n8Th"></script>
   <script>
     grecaptcha.ready(function() {
-      $(".cart_number_form").show();
-
-
-      // $(".alert-loading").show();
-      // $(".alert-error").hide();
-      // grecaptcha.execute('6Lc_lrgUAAAAANrPi6AwZTaU91vBVRbUeyD2n8Th', {action: 'homepage'}).then(function(token) {
-      //   $.ajax({
-      //     url: '/main/get_form',
-      //     type: 'POST',
-      //     data:({
-      //       secret:'6Lc_lrgUAAAAAMrepDB6Db8JvN6AQD_IZAdqpe7t',
-      //       response: token
-      //     }),
-      //     success: function (data, status, error) {
-      //       $(".alert-loading").hide();
-      //       $(".alert-error").hide();
-      //       console.log(data, status,error);
-      //       var respData = JSON.parse(data);
-      //       var resContent = JSON.parse(respData.content);
-      //       console.log(JSON.parse(respData.content));
-      //       if (resContent.success) {
-      //         $(".cart_number_form").show();
-      //         $(".alert-error").hide();
-      //       }else{
-      //         $(".cart_number_form").hide();
-      //         $(".alert-error").show();
-      //       }
-      //     },
-      //     error: function (data, status, error) {
-      //       $(".alert-loading").hide();
-      //       $(".alert-error").show();
-      //       console.log('error');
-      //       console.log(data, status,error);
-      //       $(".cart_number_form").hide();
-      //     },
-      //   });
-      //   console.log(token);
-      // });
+      // $(".cart_number_form").show();
+      $(".alert-loading").show();
+      $(".alert-error").hide();
+      grecaptcha.execute('6Lc_lrgUAAAAANrPi6AwZTaU91vBVRbUeyD2n8Th', {action: 'homepage'}).then(function(token) {
+        $.ajax({
+          url: '/main/get_form',
+          type: 'POST',
+          data:({
+            secret:'6Lc_lrgUAAAAAMrepDB6Db8JvN6AQD_IZAdqpe7t',
+            response: token
+          }),
+          success: function (data, status, error) {
+            console.log(data, status,error);
+            $(".alert-loading").hide();
+            $(".alert-error").hide();
+            var resContent = JSON.parse(data);
+            if (resContent["success"]) {
+              $(".cart_number_form").show();
+              $(".alert-error").hide();
+            }else{
+              $(".cart_number_form").hide();
+              $(".alert-error").show();
+            }
+          },
+          error: function (data, status, error) {
+            console.log(data, status,error);
+            $(".alert-loading").hide();
+            $(".alert-error").show();
+            console.log('error');
+            console.log(data, status,error);
+            $(".cart_number_form").hide();
+          },
+        });
+        console.log(token);
+      });
     });
   </script>
     <div class="row heading-row">
@@ -69,7 +66,7 @@
           <input class="form-control" type="text" name="card_number" id="card_number"
                  placeholder="" required>
         </div>
-        <button type="submit" class="btn btn-interr">Далее 🡲</button>
+        <button type="submit" class="btn btn-interr">Далее <i class="fas fa-arrow-right"></i></button>
       </form>
     </div>
   </div>
