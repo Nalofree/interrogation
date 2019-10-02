@@ -35,7 +35,7 @@
 <!--    </div>-->
     <div class="links">
         <a href="/" class="links-item">Перейти в начало</a>
-        <a href="https://firstvds.ru" class="links-item">Перейти на FirstVDS</a>
+        <a href="https://firstvds.ru/partner/profits" class="links-item">Перейти на FirstVDS</a>
     </div>
 </div>
 <?php

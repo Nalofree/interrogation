@@ -281,7 +281,7 @@ $(document).ready(function () {
         '\n',
         {
           text: 'Перейти на FirstVDS',
-          link: 'https://firstvds.ru/',
+          link: 'https://firstvds.ru//partner/profits',
           color: '#2addf8',
           bold: 'true',
           fontSize: 20,
